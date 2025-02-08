@@ -1,6 +1,10 @@
 import json
 import time
 
+"""
+Módulo para calcular el total de ventas a partir de archivos JSON.
+"""
+
 def load_json(file_path):
     """Carga un archivo JSON y maneja errores."""
     try:
@@ -13,9 +17,10 @@ def load_json(file_path):
         print(f"Error: No se pudo decodificar el JSON {file_path}.")
         return None
 
+
 def compute_total_sales(products, sales):
     """Calcula el total de ventas con base en el catálogo."""
-    total = 0
+    total_sales = 0
     errors = 0
 
     for sale in sales:
@@ -33,22 +38,29 @@ def compute_total_sales(products, sales):
             continue
 
         if product_title in products:
-            total += products[product_title] * quantity
+            total_sales += products[product_title] * quantity
         else:
             print(f"Advertencia: Producto '{product_title}' no encontrado en el catálogo.")
             errors += 1
 
-    return total, errors
+    return total_sales, errors
+
 
 # Define las rutas de los archivos en Google Drive
-products_file = "/content/drive/MyDrive/Colab Notebooks/MNA/TC4017 - Pruebas de Software/Semana 5/A5.2 Archivos de Apoyo/TC1/TC1.ProductList.json"
-sales_file = "/content/drive/MyDrive/Colab Notebooks/MNA/TC4017 - Pruebas de Software/Semana 5/A5.2 Archivos de Apoyo/TC1/TC1.Sales.json"
+PRODUCTS_FILE = (
+    "/content/drive/MyDrive/Colab Notebooks/MNA/TC4017 - Pruebas de Software/"
+    "Semana 5/A5.2 Archivos de Apoyo/TC1/TC1.ProductList.json"
+)
+SALES_FILE = (
+    "/content/drive/MyDrive/Colab Notebooks/MNA/TC4017 - Pruebas de Software/"
+    "Semana 5/A5.2 Archivos de Apoyo/TC1/TC1.Sales.json"
+)
 
 start_time = time.time()
 
 # Cargar datos desde JSON
-products_data = load_json(products_file)
-sales_data = load_json(sales_file)
+products_data = load_json(PRODUCTS_FILE)
+sales_data = load_json(SALES_FILE)
 
 # Verificar estructura de los datos cargados
 if products_data:
@@ -63,9 +75,12 @@ else:
 
 # Convertir catálogo de productos a un diccionario de precios
 try:
-    product_prices = {p.get("title"): p.get("price", 0) for p in products_data if "title" in p and "price" in p}
-except TypeError:
-    raise SystemExit("Error en el formato del archivo de productos.")
+    product_prices = {
+        p.get("title"): p.get("price", 0)
+        for p in products_data if "title" in p and "price" in p
+    }
+except TypeError as exc:
+    raise SystemExit("Error en el formato del archivo de productos.") from exc
 
 # Validar que product_prices no está vacío
 if not product_prices:
