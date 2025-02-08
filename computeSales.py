@@ -1,9 +1,12 @@
+"""
+Módulo para calcular el total de ventas a partir de archivos JSON.
+Este script carga datos de productos y ventas, calcula el total
+de ingresos y genera un archivo de resultados.
+"""
+
 import json
 import time
 
-"""
-Módulo para calcular el total de ventas a partir de archivos JSON.
-"""
 
 def load_json(file_path):
     """Carga un archivo JSON y maneja errores."""
@@ -66,12 +69,16 @@ sales_data = load_json(SALES_FILE)
 if products_data:
     print("Ejemplo de un producto:", products_data[0])  # Verifica la estructura
 else:
-    raise SystemExit("Error: El archivo de productos está vacío o no tiene la estructura esperada.")
+    raise SystemExit(
+        "Error: El archivo de productos está vacío o no tiene la estructura esperada."
+    )
 
 if sales_data:
     print("Ejemplo de una venta:", sales_data[0])  # Verifica la estructura
 else:
-    raise SystemExit("Error: El archivo de ventas está vacío o no tiene la estructura esperada.")
+    raise SystemExit(
+        "Error: El archivo de ventas está vacío o no tiene la estructura esperada."
+    )
 
 # Convertir catálogo de productos a un diccionario de precios
 try:
