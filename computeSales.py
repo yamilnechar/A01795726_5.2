@@ -27,13 +27,14 @@ def compute_total_sales(products, sales):
     errors = 0
 
     for sale in sales:
-        if not isinstance(sale, dict):  # Verifica que la venta es un diccionario
+        if not isinstance(sale, dict):
             print("Advertencia: Venta con formato incorrecto, se omitirá.")
             errors += 1
             continue
 
-        product_title = sale.get("Product")  # Cambia "product_id" por "Product"
-        quantity = sale.get("Quantity", 0)  # Si no existe, usa 0
+        product_title = sale.get("Product")
+        # Se obtiene el título del producto para la venta
+        quantity = sale.get("Quantity", 0)
 
         if product_title is None:
             print("Advertencia: Venta sin 'Product', se omitirá.")
@@ -43,7 +44,10 @@ def compute_total_sales(products, sales):
         if product_title in products:
             total_sales += products[product_title] * quantity
         else:
-            print(f"Advertencia: Producto '{product_title}' no encontrado en el catálogo.")
+            print(
+                f"Advertencia: Producto '{product_title}' "
+                "no encontrado en el catálogo."
+            )
             errors += 1
 
     return total_sales, errors
@@ -67,31 +71,34 @@ sales_data = load_json(SALES_FILE)
 
 # Verificar estructura de los datos cargados
 if products_data:
-    print("Ejemplo de un producto:", products_data[0])  # Verifica la estructura
+    print("Ejemplo de un producto:", products_data[0])
 else:
     raise SystemExit(
-        "Error: El archivo de productos está vacío o no tiene la estructura esperada."
+        "Error: El archivo de productos está vacío "
+        "o no tiene la estructura esperada."
     )
 
 if sales_data:
-    print("Ejemplo de una venta:", sales_data[0])  # Verifica la estructura
+    print("Ejemplo de una venta:", sales_data[0])
 else:
     raise SystemExit(
-        "Error: El archivo de ventas está vacío o no tiene la estructura esperada."
+        "Error: El archivo de ventas está vacío "
+        "o no tiene la estructura esperada."
     )
 
 # Convertir catálogo de productos a un diccionario de precios
 try:
     product_prices = {
         p.get("title"): p.get("price", 0)
-        for p in products_data if "title" in p and "price" in p
+        for p in products_data
+        if "title" in p and "price" in p
     }
 except TypeError as exc:
     raise SystemExit("Error en el formato del archivo de productos.") from exc
 
 # Validar que product_prices no está vacío
 if not product_prices:
-    raise SystemExit("Error: No se pudo generar el catálogo de precios correctamente.")
+    raise SystemExit("Error: No se pudo generar el catálogo de precios.")
 
 # Calcular el total de ventas
 total, error_count = compute_total_sales(product_prices, sales_data)
