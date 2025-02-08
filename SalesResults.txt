@@ -1,0 +1,3 @@
+Total de ventas: $2481.86
+Errores encontrados: 0
+Tiempo de ejecución: 0.0116 segundos
